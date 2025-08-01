@@ -32,7 +32,8 @@ class UserSerializer(serializers.ModelSerializer):
 class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'email', 'phone', 'address', 'company_name', 'profile_picture')
+        fields = ('id', 'first_name', 'last_name', 'email', 'user_type', 'phone', 'address', 'company_name', 'profile_picture')
+        read_only_fields = ('id', 'user_type')
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
