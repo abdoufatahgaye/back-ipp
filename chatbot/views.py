@@ -38,20 +38,61 @@ class ChatConversationDetailView(generics.RetrieveUpdateDestroyAPIView):
         instance.save()
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def send_message(request, conversation_id=None):
     """Envoie un message et génère une réponse du bot"""
     try:
         # Récupérer ou créer une conversation
         if conversation_id:
-            conversation = get_object_or_404(
-                ChatConversation, 
-                id=conversation_id, 
-                user=request.user, 
-                is_active=True
-            )
+            if request.user.is_authenticated:
+                conversation = get_object_or_404(
+                    ChatConversation, 
+                    id=conversation_id, 
+                    user=request.user, 
+                    is_active=True
+                )
+            else:
+                return Response(
+                    {'error': 'Authentification requise pour accéder à une conversation existante.'}, 
+                    status=status.HTTP_401_UNAUTHORIZED
+                )
         else:
-            # Créer une nouvelle conversation
+            # Pour les utilisateurs non authentifiés, on traite le message sans sauvegarder
+            if not request.user.is_authenticated:
+                # Traitement direct sans sauvegarde
+                message_serializer = ChatMessageCreateSerializer(data=request.data)
+                if not message_serializer.is_valid():
+                    return Response(
+                        message_serializer.errors, 
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+                
+                user_message_content = message_serializer.validated_data['content']
+                
+                # Générer la réponse du bot
+                ollama_service = OllamaService()
+                
+                if ollama_service.is_available():
+                    result = ollama_service.generate_response(user_message_content)
+                    
+                    if result['success']:
+                        bot_response = result['response']
+                        processing_time = result['processing_time']
+                    else:
+                        logger.warning(f"Erreur Ollama: {result['error']}")
+                        bot_response = ollama_service.get_fallback_response(user_message_content)
+                        processing_time = result['processing_time']
+                else:
+                    logger.warning("Ollama non disponible, utilisation des réponses de secours")
+                    bot_response = ollama_service.get_fallback_response(user_message_content)
+                    processing_time = 0.1
+                
+                return Response({
+                    'response': bot_response,
+                    'processing_time': processing_time
+                }, status=status.HTTP_200_OK)
+            
+            # Créer une nouvelle conversation pour les utilisateurs authentifiés
             conversation = ChatConversation.objects.create(
                 user=request.user,
                 title=f"Conversation {timezone.now().strftime('%d/%m/%Y %H:%M')}"
