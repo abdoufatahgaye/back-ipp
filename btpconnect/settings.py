@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
     'accounts',
+    'chatbot',
 ]
 
 MIDDLEWARE = [
@@ -93,6 +94,23 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5174",
+    "http://127.0.0.1:5174",
+]
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -131,3 +149,8 @@ SIMPLE_JWT = {
 }
 
 AUTH_USER_MODEL = 'accounts.User'
+
+# Ollama Configuration
+OLLAMA_BASE_URL = 'http://localhost:11434'
+OLLAMA_MODEL = 'gemma3:1b'
+OLLAMA_TIMEOUT = 30
