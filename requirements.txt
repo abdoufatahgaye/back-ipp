@@ -1,10 +1,21 @@
-# Django et extensions
-Django>=4.2.0
+# Django et extensions (versions compatibles avec djongo)
+Django==4.1.4
 djangorestframework>=3.14.0
 djangorestframework-simplejwt>=5.2.0
 django-cors-headers>=4.0.0
 
-# Base de données
+# Base de données MongoDB avec djongo - VERSIONS EXACTES REQUISES
+djongo==1.3.6
+pymongo==3.12.3
+dnspython==2.2.1
+sqlparse==0.2.4
+
+# Dépendances système Django
+asgiref==3.6.0
+pytz==2022.7
+tzdata==2022.7
+
+# Base de données PostgreSQL (optionnel si vous gardez aussi PostgreSQL)
 psycopg2-binary>=2.9.0
 
 # Gestion des images

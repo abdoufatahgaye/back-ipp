@@ -55,12 +55,24 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'btpconnect.wsgi.application'
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'djongo',
+        'NAME': 'ipp',
+        'ENFORCE_SCHEMA': False,
+        'CLIENT': {
+            'host': "mongodb+srv://mensche4r:s2dyrwFHFfljbKr5@cluster0.fg3ups2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+        }
     }
 }
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
