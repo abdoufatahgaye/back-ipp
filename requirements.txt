@@ -3,6 +3,7 @@ Django>=4.2.0
 djangorestframework>=3.14.0
 djangorestframework-simplejwt>=5.2.0
 django-cors-headers>=4.0.0
+django-filter>=23.2
 
 # Base de données
 psycopg2-binary>=2.9.0
