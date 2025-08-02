@@ -36,7 +36,7 @@ class OllamaService:
             "options": {
                 "temperature": 0.7,
                 "top_p": 0.9,
-                "max_tokens": 500
+                "max_tokens": 150
             }
         }
         
@@ -91,29 +91,18 @@ class OllamaService:
     
     def _build_system_prompt(self) -> str:
         """Construit le prompt système pour BTP Connect"""
-        return """Tu es l'assistant virtuel de BTP Connect, une plateforme de mise en relation entre clients, maîtres d'œuvre et fournisseurs dans le secteur du BTP au Sénégal.
+        return """Tu es l'assistant virtuel de BTP Connect, plateforme BTP au Sénégal.
 
-Ton rôle:
-- Aider les utilisateurs à naviguer sur la plateforme
-- Répondre aux questions sur les commandes, livraisons, prix et paiements
-- Fournir des informations sur les matériaux de construction
-- Assister dans la gestion des projets BTP
-- Être courtois, professionnel et utile
-- Improviser des réponses réalistes pour les questions sur le statut des commandes et les fournisseurs
+IMPORTANT: Réponds TOUJOURS de manière TRÈS COURTE et CONCISE (maximum 2-3 phrases).
 
-Contexte de la plateforme:
-- Marketplace de matériaux de construction au Sénégal
-- Gestion de projets BTP
-- Système de commandes et livraisons
-- Paiements sécurisés en FCFA
-- Suivi des commandes et facturation
-- Fournisseurs locaux sénégalais
+Ton rôle: Aider avec les commandes, livraisons, prix, matériaux BTP et projets.
 
-Quand on te demande le statut d'une commande, invente des réponses réalistes comme "Votre dernière commande est en cours d'expédition et sera livrée dans 2-3 jours" ou "Votre commande a été préparée et est en route vers Dakar".
+Contexte: Marketplace matériaux construction Sénégal, paiements FCFA, fournisseurs locaux.
 
-Quand on demande des fournisseurs pour un produit, suggère des noms de fournisseurs sénégalais fictifs mais réalistes.
+Pour les statuts de commandes, invente des réponses courtes et réalistes.
+Pour les fournisseurs, suggère des noms sénégalais fictifs.
 
-Réponds toujours en français, de manière claire et concise. Si tu ne connais pas une information spécifique, oriente l'utilisateur vers le support ou les sections appropriées de la plateforme."""
+Réponds en français, sois direct et concis."""
     
     def generate_response_stream(self, message: str, context: Optional[str] = None) -> Dict[str, Any]:
         """Génère une réponse en streaming avec Ollama"""
@@ -133,7 +122,7 @@ Réponds toujours en français, de manière claire et concise. Si tu ne connais 
             "options": {
                 "temperature": 0.7,
                 "top_p": 0.9,
-                "max_tokens": 500
+                "max_tokens": 150
             }
         }
         
@@ -186,48 +175,48 @@ Réponds toujours en français, de manière claire et concise. Si tu ne connais 
         if any(word in message_lower for word in ['statut', 'état', 'suivi', 'où est', 'dernière commande']):
             import random
             responses = [
-                "Votre dernière commande est en cours d'expédition et sera livrée dans 2-3 jours à Dakar.",
-                "Votre commande a été préparée par notre fournisseur et est actuellement en transit vers votre adresse.",
-                "Bonne nouvelle ! Votre commande est en cours de livraison et devrait arriver demain.",
-                "Votre commande est en préparation dans notre entrepôt de Rufisque et sera expédiée aujourd'hui.",
-                "Votre dernière commande a été confirmée et sera livrée dans les 48 heures."
+                "Votre commande est en cours d'expédition, livraison dans 2-3 jours.",
+                "Commande préparée, en transit vers votre adresse.",
+                "Votre commande arrive demain !",
+                "En préparation à Rufisque, expédition aujourd'hui.",
+                "Commande confirmée, livraison sous 48h."
             ]
             return random.choice(responses)
         
         # Questions sur les fournisseurs et produits
         elif any(word in message_lower for word in ['ciment', 'béton']):
-            return "Pour le ciment, nous avons plusieurs fournisseurs disponibles : SOCOCIM Industries, Ciments du Sahel, et Matériaux Sénégal SARL. Ils proposent du ciment Portland de qualité supérieure livré partout au Sénégal."
+            return "Ciment disponible : SOCOCIM Industries, Ciments du Sahel. Livraison partout au Sénégal."
         
         elif any(word in message_lower for word in ['fer', 'acier', 'ferraille']):
-            return "Nos fournisseurs de fer à béton incluent : Métallurgie Sénégalaise, Fer et Acier Dakar, et Sidérurgie de l'Ouest. Ils ont en stock des barres de 6mm à 32mm conformes aux normes."
+            return "Fer à béton : Métallurgie Sénégalaise, Fer et Acier Dakar. Barres 6mm à 32mm en stock."
         
         elif any(word in message_lower for word in ['sable', 'gravier', 'granulat']):
-            return "Pour les granulats, contactez : Carrières de Diack, Sable et Gravier Thiès, ou Granulats du Sine-Saloum. Ils livrent du sable de mer, sable de dune et gravier concassé."
+            return "Granulats : Carrières de Diack, Sable et Gravier Thiès. Sable de mer et gravier disponibles."
         
         elif any(word in message_lower for word in ['brique', 'parpaing', 'bloc']):
-            return "Nos partenaires pour les blocs : Briqueterie Moderne, Parpaings du Cap-Vert, et Blocs Sénégal Plus. Ils produisent des parpaings de 15x20x40 et 20x20x40 de haute qualité."
+            return "Parpaings : Briqueterie Moderne, Blocs Sénégal Plus. Formats 15x20x40 et 20x20x40."
         
         elif any(word in message_lower for word in ['fournisseur', 'qui vend', 'où acheter']):
-            return "Nous travaillons avec plus de 150 fournisseurs certifiés à travers le Sénégal. Spécifiez le matériau recherché pour que je vous oriente vers les meilleurs fournisseurs de votre région."
+            return "Plus de 150 fournisseurs certifiés. Précisez le matériau recherché."
         
         # Questions générales sur les commandes
         elif any(word in message_lower for word in ['commande', 'commander', 'acheter']):
-            return "Pour passer une commande, rendez-vous sur notre Marketplace et sélectionnez les matériaux dont vous avez besoin. Livraison disponible à Dakar, Thiès, Saint-Louis et dans toutes les régions du Sénégal."
+            return "Commandez sur notre Marketplace. Livraison dans toutes les régions du Sénégal."
         
         elif any(word in message_lower for word in ['livraison', 'délai', 'transport']):
-            return "Les délais de livraison varient de 24h à 72h selon votre localisation au Sénégal. Livraison express disponible pour Dakar et sa banlieue."
+            return "Délais : 24h à 72h selon votre localisation. Express pour Dakar."
         
         elif any(word in message_lower for word in ['prix', 'coût', 'tarif', 'montant']):
-            return "Tous nos prix sont affichés en FCFA. Nous proposons des tarifs dégressifs pour les gros volumes et des facilités de paiement pour les professionnels du BTP."
+            return "Prix en FCFA. Tarifs dégressifs et facilités de paiement disponibles."
         
         elif any(word in message_lower for word in ['paiement', 'payer', 'facture']):
-            return "Nous acceptons les paiements par Orange Money, Wave, virement bancaire et espèces à la livraison. Facturation automatique pour toutes vos commandes."
+            return "Paiements : Orange Money, Wave, virement, espèces. Facturation automatique."
         
         elif any(word in message_lower for word in ['aide', 'help', 'support', 'assistance']):
-            return "Je suis là pour vous aider ! Posez-moi des questions sur vos commandes, les fournisseurs, les prix, ou la livraison. Notre équipe support est aussi disponible au +221 33 XXX XX XX."
+            return "Je vous aide avec commandes, fournisseurs, prix et livraisons. Support : +221 33 XXX XX XX."
         
         elif any(word in message_lower for word in ['bonjour', 'salut', 'hello', 'bonsoir']):
-            return "Bonjour ! Bienvenue sur BTP Connect Sénégal. Comment puis-je vous aider aujourd'hui ?"
+            return "Bonjour ! Bienvenue sur BTP Connect. Comment puis-je vous aider ?"
         
         else:
-            return "Je comprends votre question. Pour une assistance personnalisée, contactez notre équipe support ou consultez notre section d'aide. Nous sommes là pour faciliter vos projets BTP au Sénégal !"
+            return "Pour une assistance personnalisée, contactez notre support ou consultez l'aide."
