@@ -1,35 +1,25 @@
-# Django et extensions (versions compatibles avec djongo)
-Django==4.1.4
-djangorestframework>=3.14.0
-djangorestframework-simplejwt>=5.2.0
-django-cors-headers>=4.0.0
-django-filter>=23.2
-
-# Base de données MongoDB avec djongo - VERSIONS EXACTES REQUISES
-djongo==1.3.6
-pymongo==3.12.3
-dnspython==2.2.1
-sqlparse==0.2.4
-
-# Dépendances système Django
 asgiref==3.6.0
-pytz==2022.7
-tzdata==2022.7
-
-# Base de données PostgreSQL (optionnel si vous gardez aussi PostgreSQL)
-psycopg2-binary>=2.9.0
-
-# Gestion des images
-Pillow>=9.5.0
-
-# Requêtes HTTP
-requests>=2.31.0
-
-# Utilitaires Python
-python-decouple>=3.8
-
-# Serveur WSGI pour production
-gunicorn>=20.1.0
-
-# Outils de développement
-python-dotenv>=1.0.0
+certifi==2025.7.14
+charset-normalizer==3.4.2
+Django==4.1.4
+django-cors-headers==4.0.0
+django-filter==23.2
+djangorestframework==3.14.0
+djangorestframework-simplejwt==5.2.0
+djongo==1.3.6
+dnspython==2.2.1
+gunicorn==23.0.0
+idna==3.10
+packaging==25.0
+pillow==11.3.0
+psycopg2-binary==2.9.10
+PyJWT==2.10.1
+pymongo==3.12.3
+python-decouple==3.8
+python-dotenv==1.1.1
+pytz==2025.2
+requests==2.32.4
+setuptools==80.9.0
+sqlparse==0.2.4
+tzdata==2025.2
+urllib3==2.5.0
