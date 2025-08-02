@@ -1,0 +1,23 @@
+# Django et extensions
+Django>=4.2.0
+djangorestframework>=3.14.0
+djangorestframework-simplejwt>=5.2.0
+django-cors-headers>=4.0.0
+
+# Base de données
+psycopg2-binary>=2.9.0
+
+# Gestion des images
+Pillow>=9.5.0
+
+# Requêtes HTTP
+requests>=2.31.0
+
+# Utilitaires Python
+python-decouple>=3.8
+
+# Serveur WSGI pour production
+gunicorn>=20.1.0
+
+# Outils de développement
+python-dotenv>=1.0.0
